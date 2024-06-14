@@ -1,0 +1,27 @@
+name: Send Email on Push
+
+on:
+  push:
+    branches:
+      - master  
+
+jobs:
+  send_email:
+    runs-on: windows
+
+    
+    
+    steps:
+    - name: Send email via EmailJS
+      env:
+        EMAILJS_USERID: ${{ secrets.EMAILJS_USERID }}
+        EMAILJS_TEMPLATEID: template_39zayaq
+        EMAILJS_SERVICEID: service_033sb7q
+        EMAILJS_TOKEN: ${{ secrets.EMAILJS_TOKEN }}
+        TO_EMAIL: bankskayanja@gmail.com
+        FROM_EMAIL: your_sender_email
+      run: |
+        curl -v -X POST \
+          -H "Content-Type: application/json" \
+          -d '{"service_033sb7q": "'"$EMAILJS_SERVICEID"'", "template_39zayaq": "'"$EMAILJS_TEMPLATEID"'", "WxsCjJfGxkfiJgIx-": "'"$EMAILJS_USERID"'", "Hello": {"bankskayanja@gmail.com": "'"$TO_EMAIL"'", "from_email": "'"$FROM_EMAIL"'", "subject": "GitHub Push Event", "This is a confirmation email for your order number ": "A push event has occurred on GitHub."}}' \
+          https://api.emailjs.com/api/v1.0/email/send
